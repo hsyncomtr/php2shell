@@ -1,0 +1,8 @@
+# php2shell - FrankenPHP: global frankenphp bloğunda oturum yükleme ilerlemesini kapat.
+# RESMİ OLMAYAN, GEÇİCİ. Gerçek çözüm: PHP'yi güncelleyin.
+{
+    frankenphp {
+        php_ini session.upload_progress.enabled 0
+    }
+}
+# Multipart'ı kenarda da engellemek için site bloğu içinde caddy/php2shell.caddyfile kullanın.

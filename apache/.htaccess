@@ -1,0 +1,14 @@
+# php2shell (CVE-2026-109618 / CVE-2026-109619) - RESMİ OLMAYAN, GEÇİCİ azaltım.
+# multipart/form-data POST/PUT/PATCH isteklerini PHP'ye ulaşmadan engeller.
+# UYARI: Meşru yüklemeleri ve multipart formları da engeller. YALNIZCA
+# yükleme almayan yollarda kullanın. Gerçek çözüm PHP'yi güncellemektir.
+#
+# Bu regex neden böyle: PHP, Content-Type'ı küçük harfe çevirir ve ilk ';', ','
+# veya boşlukta keser, sonra başlıkta herhangi bir yerde "boundary" arar. Dolayısıyla
+# "multipart/form-data,boundary=x" PHP için multipart'TIR. Virgül yakalanmalıdır.
+# %{HTTP:Content-Type} kullanın (ham başlık), %{CONTENT_TYPE} DEĞİL - o mod_rewrite
+# altında çoğu zaman eşleşmez.
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} ^(POST|PUT|PATCH)$ [NC]
+RewriteCond %{HTTP:Content-Type} ^[[:space:]]*multipart/form-data([;,[:space:]]|$) [NC]
+RewriteRule ^ - [F,L]
